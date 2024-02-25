@@ -3,3 +3,5 @@ pytest
 structlog
 curlify
 pydantic
+'datamodel-code-generator[http]'
+pyhamcrest
