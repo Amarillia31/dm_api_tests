@@ -13,7 +13,7 @@ class ChangePassword(BaseModel):
         extra = Extra.forbid
 
     login: Optional[StrictStr] = Field(None, description='User login')
-    token: Optional[UUID] = Field(None, description='Password reset token')
+    token: Optional[UUID | StrictStr] = Field(None, description='Password reset token')
     old_password: Optional[StrictStr] = Field(
         None, alias='oldPassword', description='Old password'
     )

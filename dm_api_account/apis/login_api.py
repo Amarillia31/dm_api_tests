@@ -19,7 +19,7 @@ class LoginApi:
             json: LoginCredentials,
             status_code: int = 200,
             **kwargs
-    ) -> Response | UserEnvelope:
+    ) -> Response:
         """
         :param status_code: server response status
         :param json login_credentials_model
@@ -34,7 +34,7 @@ class LoginApi:
         )
         validate_status_code(response, status_code)
         if response.status_code == 200:
-            return UserEnvelope(**response.json())
+            UserEnvelope(**response.json())
         return response
 
     def delete_v1_account_login(
