@@ -1,7 +1,8 @@
-requests
+requests~=2.31.0
 pytest
-structlog
-curlify
-pydantic
+structlog~=24.1.0
+curlify~=2.2.1
+pydantic~=2.6.1
 'datamodel-code-generator[http]'
 pyhamcrest
+records

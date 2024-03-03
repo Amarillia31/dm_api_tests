@@ -37,7 +37,7 @@ class MailhogApi:
         self.host = host
         self.client = Restclient(host=host)
 
-    @decorator
+#    @decorator
     def get_api_v2_messages(
             self,
             limit: int = 50
@@ -101,5 +101,14 @@ class MailhogApi:
             time.sleep(2)
         return self.get_token_by_login(login=login, attempt=attempt - 1)
 
+    def delete_all_messages(
+            self
+    ):
+        response = self.client.delete(path='/api/v1/messages')
+        return response
 
-MailhogApi().get_token_by_login(login='user_27')
+
+#MailhogApi().get_token_by_login(login='user_47')
+# response = MailhogApi().get_api_v2_messages()
+# print(response)
+# УДАЛИТЬ ПОПОЗЖЕ

@@ -21,6 +21,7 @@ class Login:
             password: str,
             remember_me: bool = True,
             status_code: int = 200,
+            full_response: bool = True
     ):
         response = self.facade.login_api.post_v1_account_login(
             json=LoginCredentials(
@@ -28,6 +29,7 @@ class Login:
                 password=password,
                 rememberMe=remember_me
             ),
+            full_response=full_response,
             status_code=status_code
         )
         return response

@@ -2,6 +2,7 @@ from requests import Response
 from utilites import validate_request_json, validate_status_code
 from restclient.restclient import Restclient
 from ..models import *
+from ..models import UserEnvelope
 
 
 class LoginApi:
@@ -18,9 +19,11 @@ class LoginApi:
             self,
             json: LoginCredentials,
             status_code: int = 200,
+            full_response: bool = True,
             **kwargs
-    ) -> Response:
+    ) -> Response | UserEnvelope:
         """
+        :param full_response:
         :param status_code: server response status
         :param json login_credentials_model
         Authenticate via credentials
@@ -35,7 +38,11 @@ class LoginApi:
         validate_status_code(response, status_code)
         if response.status_code == 200:
             UserEnvelope(**response.json())
-        return response
+
+        if full_response is True:
+            return response
+        else:
+            return UserEnvelope(**response.json())
 
     def delete_v1_account_login(
             self,
