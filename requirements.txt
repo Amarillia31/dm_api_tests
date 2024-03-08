@@ -5,4 +5,5 @@ curlify~=2.2.1
 pydantic~=2.6.1
 'datamodel-code-generator[http]'
 pyhamcrest
-records
+records~=0.5.3
+SQLAlchemy~=1.4.52
