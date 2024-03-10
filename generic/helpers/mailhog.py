@@ -108,7 +108,8 @@ class MailhogApi:
         return response
 
 
-#MailhogApi().get_token_by_login(login='user_47')
-# response = MailhogApi().get_api_v2_messages()
+# TODO УДАЛИТЬ ПОПОЗЖЕ
+# response = MailhogApi().get_token_by_login(login='user_60')
+# # response = MailhogApi().get_api_v2_messages()
 # print(response)
-# УДАЛИТЬ ПОПОЗЖЕ
+#
