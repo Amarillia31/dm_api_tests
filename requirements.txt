@@ -10,3 +10,4 @@ SQLAlchemy==1.4.52
 vyper-config==1.2.1
 sqlacodegen==2.3.0.post1
 psycopg2==2.9.9
+allure-pytest==2.13.3
