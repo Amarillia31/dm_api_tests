@@ -1,5 +1,6 @@
 import uuid
 
+import allure
 import records
 import structlog
 
@@ -32,10 +33,20 @@ class DbClient:
             event='request',
             query=query
         )
+        allure.attach(
+            query,
+            name='DB query',
+            attachment_type=allure.attachment_type.TEXT
+        )
         dataset = self.db.query(query=query).as_dict()
         log.msg(
             event='response',
             dataset=dataset
+        )
+        allure.attach(
+            str(dataset),
+            name='DB response',
+            attachment_type=allure.attachment_type.TEXT
         )
         return dataset
 
@@ -48,6 +59,11 @@ class DbClient:
         log.msg(
             event='request',
             query='query'
+        )
+        allure.attach(
+            query,
+            name='DB query',
+            attachment_type=allure.attachment_type.TEXT
         )
         self.db.bulk_query(query=query)
 

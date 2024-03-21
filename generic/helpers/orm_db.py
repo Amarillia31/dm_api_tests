@@ -1,5 +1,6 @@
 from typing import List
 
+import allure
 from sqlalchemy import (
     select,
     delete,
@@ -28,15 +29,17 @@ class OrmDatabase:
         return dataset
 
     def delete_user_by_login(self, login: str):
-        query = delete(User).where(
-            User.Login == login
-        )
-        dataset = self.db.send_bulk_query(query=query)
+        with allure.step('Check user was removed'):
+            query = delete(User).where(
+                User.Login == login
+            )
+            dataset = self.db.send_bulk_query(query=query)
         return dataset
 
     def update_activation_status(self, login: str, activation_status: bool):
-        query = update(User).where(
-            User.Login == login
-        ).values(Activated=activation_status)
-        dataset = self.db.send_bulk_query(query=query)
+        with allure.step('User activation'):
+            query = update(User).where(
+                User.Login == login
+            ).values(Activated=activation_status)
+            dataset = self.db.send_bulk_query(query=query)
         return dataset

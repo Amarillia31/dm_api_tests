@@ -1,3 +1,4 @@
+import allure
 from requests import Response
 from utilites import validate_request_json, validate_status_code
 from restclient.restclient import Restclient
@@ -29,12 +30,12 @@ class LoginApi:
         Authenticate via credentials
         :return:
         """
-
-        response = self.client.post(
-            path=f"/v1/account/login",
-            json=validate_request_json(json),
-            **kwargs
-        )
+        with allure.step('Login user'):
+            response = self.client.post(
+                path=f"/v1/account/login",
+                json=validate_request_json(json),
+                **kwargs
+            )
         validate_status_code(response, status_code)
         if response.status_code == 200:
             UserEnvelope(**response.json())
@@ -53,11 +54,11 @@ class LoginApi:
         Logout as current user
         :return:
         """
-
-        response = self.client.delete(
-            path=f"/v1/account/login",
-            **kwargs
-        )
+        with allure.step('Logout user'):
+            response = self.client.delete(
+                path=f"/v1/account/login",
+                **kwargs
+            )
         validate_status_code(response, status_code)
         return response
 
@@ -70,10 +71,10 @@ class LoginApi:
         Logout from every device
         :return:
         """
-
-        response = self.client.delete(
-            path=f"/v1/account/login/all",
-            **kwargs
-        )
+        with allure.step('Logout from all devices'):
+            response = self.client.delete(
+                path=f"/v1/account/login/all",
+                **kwargs
+            )
         validate_status_code(response, status_code)
         return response

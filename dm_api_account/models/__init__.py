@@ -7,3 +7,4 @@ from dm_api_account.models.user_envelope_model import UserEnvelope
 from dm_api_account.models.general_error_model import GeneralError
 from dm_api_account.models.registration_model import Registration
 from dm_api_account.models.change_email_model import ChangeEmail
+from generic.helpers.model_helpers import CustomChangePassword

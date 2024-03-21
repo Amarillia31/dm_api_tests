@@ -1,3 +1,4 @@
+import allure
 import structlog
 from hamcrest import (
     assert_that,
@@ -16,40 +17,23 @@ structlog.configure(
 )
 
 
-def test_put_v1_account_token(facade, orm, prepare_user):
-    login = prepare_user.login
-    email = prepare_user.email
-    password = prepare_user.password
+@allure.suite('Tests for method PUT{host}/v1/account/token')
+@allure.sub_suite('Positive test cases')
+class TestsPutV1AccountEmail:
+    @allure.title('Activate User')
+    def test_put_v1_account_token(self, facade, orm, prepare_user, assertions):
+        login = prepare_user.login
+        email = prepare_user.email
+        password = prepare_user.password
 
-    facade.account.register_new_user(
-        login=login,
-        email=email,
-        password=password
-    )
+        facade.account.register_new_user(login=login, email=email, password=password)
+        assertions.check_user_was_created(login=login)
 
-    dataset = orm.get_user_by_login(login=login)
-    for row in dataset:
-        assert_that(
-            row, has_entries(
-                {
-                    'Login': login,
-                    'Activated': False
-                }
-            )
-        )
+        response = facade.account.activate_registered_user(login=login)
+        assertions.check_user_war_activated(login=login)
 
-    response = facade.account.activate_registered_user(login=login)
-
-    dataset = orm.get_user_by_login(login=login)
-    for row in dataset:
-        assert_that(row, has_entries(
-            {
-                'Activated': True
-            }
-        ))
-
-    assert_that(response.resource, has_properties({
-        "login": login,
-        "roles": [UserRole.guest, UserRole.player],
-        "rating": Rating(enabled=True, quality=0, quantity=0)
-    }))
+        assert_that(response.resource, has_properties({
+            "login": login,
+            "roles": [UserRole.guest, UserRole.player],
+            "rating": Rating(enabled=True, quality=0, quantity=0)
+        }))

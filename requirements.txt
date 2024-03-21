@@ -4,8 +4,9 @@ structlog==24.1.0
 curlify==2.2.1
 pydantic==2.6.1
 'datamodel-code-generator[http]'
-pyhamcrest
+pyhamcrest==2.1.0
 records==0.5.3
 SQLAlchemy==1.4.52
 vyper-config==1.2.1
-sqlacodegen
+sqlacodegen==2.3.0.post1
+psycopg2==2.9.9

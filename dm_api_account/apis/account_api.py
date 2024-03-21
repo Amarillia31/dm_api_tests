@@ -1,3 +1,4 @@
+import allure
 from requests import Response
 from utilites import (
     validate_request_json,
@@ -30,12 +31,12 @@ class AccountApi:
         Register new user
         :return:
         """
-
-        response = self.client.post(
-            path=f"/v1/account",
-            json=validate_request_json(json),
-            **kwargs
-        )
+        with allure.step('Register user'):
+            response = self.client.post(
+                path=f"/v1/account",
+                json=validate_request_json(json),
+                **kwargs
+            )
         validate_status_code(response, status_code)
         return response
 
@@ -51,12 +52,12 @@ class AccountApi:
         Reset registered user password
         :return:
         """
-
-        response = self.client.post(
-            path=f"/v1/account/password",
-            json=validate_request_json(json),
-            **kwargs
-        )
+        with allure.step('Reset registered user password'):
+            response = self.client.post(
+                path=f"/v1/account/password",
+                json=validate_request_json(json),
+                **kwargs
+            )
         validate_status_code(response, status_code)
         if response.status_code == 201:
             UserEnvelope(**response.json())
@@ -75,11 +76,12 @@ class AccountApi:
         :return:
         """
 
-        response = self.client.put(
-            path=f"/v1/account/email",
-            json=validate_request_json(json),
-            **kwargs
-        )
+        with allure.step('change registered user email'):
+            response = self.client.put(
+                path=f"/v1/account/email",
+                json=validate_request_json(json),
+                **kwargs
+            )
         validate_status_code(response, status_code)
         if response.status_code == 200:
             return UserEnvelope(**response.json())
@@ -98,11 +100,12 @@ class AccountApi:
         :return:
         """
 
-        response = self.client.put(
-            path=f"/v1/account/password",
-            json=validate_request_json(json),
-            **kwargs
-        )
+        with allure.step('change registered user password'):
+            response = self.client.put(
+                path=f"/v1/account/password",
+                json=validate_request_json(json),
+                **kwargs
+            )
         validate_status_code(response, status_code)
         if response.status_code == 200:
             return UserEnvelope(**response.json())
@@ -119,10 +122,11 @@ class AccountApi:
         :return:
         """
 
-        response = self.client.put(
-            path=f"/v1/account/{token}",
-            **kwargs
-        )
+        with allure.step('Activate registered user'):
+            response = self.client.put(
+                path=f"/v1/account/{token}",
+                **kwargs
+            )
         validate_status_code(response, status_code)
         if response.status_code == 200:
             return UserEnvelope(**response.json())
@@ -138,10 +142,11 @@ class AccountApi:
         :return:
         """
 
-        response = self.client.get(
-            path=f"/v1/account",
-            **kwargs
-        )
+        with allure.step('Get current user'):
+            response = self.client.get(
+                path=f"/v1/account",
+                **kwargs
+            )
         validate_status_code(response, status_code)
         if response.status_code == 200:
             return UserDetailsEnvelope(**response.json())

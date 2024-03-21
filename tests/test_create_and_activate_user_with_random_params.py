@@ -1,3 +1,4 @@
+import allure
 import pytest
 from hamcrest import (
     assert_that,
@@ -15,6 +16,7 @@ from utilites import random_string
         ('12', '12', '123456', 400, {"Email": ["Invalid"]})
     ]
 )
+@allure.title('Check user login')
 def test_create_and_activated_user_with_random_params(
         facade,
         orm,
@@ -22,28 +24,16 @@ def test_create_and_activated_user_with_random_params(
         email,
         password,
         status_code,
-        check
+        check,
+        assertions
 ):
+
     orm.delete_user_by_login(login=login)
-    facade.mailhog.delete_all_messages()
-    response = facade.account.register_new_user(
-        login=login,
-        email=email,
-        password=password,
-        status_code=status_code
-    )
+#    facade.mailhog.delete_all_messages()
+    response = facade.account.register_new_user(login=login, email=email, password=password, status_code=status_code)
     if status_code == 201:
         facade.account.activate_registered_user(login=login)
-        dataset = orm.get_user_by_login(login=login)
-        for row in dataset:
-            assert_that(
-                row, has_entries(
-                    {
-                        'Login': login,
-                        'Activated': True
-                    }
-                )
-            )
+        assertions.check_user_war_activated(login=login)
 
     else:
         assert response.json()[

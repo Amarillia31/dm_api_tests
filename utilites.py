@@ -4,6 +4,7 @@ from string import (
     digits,
 )
 
+import allure
 import requests
 from pydantic import BaseModel
 
@@ -18,9 +19,10 @@ def validate_status_code(
         response: requests.Response,
         status_code: int
 ):
-    if status_code == 201:
-        assert response.status_code == status_code, \
-            f'status code should be 201 but {response.status_code} received instead'
+    with allure.step('Check validation and status code'):
+        if status_code == 201:
+            assert response.status_code == status_code, \
+                f'status code should be 201 but {response.status_code} received instead'
 
 
 def random_string(

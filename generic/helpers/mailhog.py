@@ -2,6 +2,7 @@ import json
 import pprint
 import time
 
+import allure
 import requests
 from requests import session
 from requests import Response
@@ -47,12 +48,13 @@ class MailhogApi:
         :param limit:
         :return:
         """
-        response = self.client.get(
-            path=f"/api/v2/messages",
-            params={
-                'limit': limit
-            }
-        )
+        with allure.step('Check emails at web gui'):
+            response = self.client.get(
+                path=f"/api/v2/messages",
+                params={
+                    'limit': limit
+                }
+            )
         return response
 
     def get_token_from_last_email(
@@ -62,9 +64,10 @@ class MailhogApi:
         get user activation token from last email
         :return:
         """
-        emails = self.get_api_v2_messages(limit=1).json()
-        token_url = json.loads(emails['items'][0]['Content']['Body'])['ConfirmationLinkUrl']
-        token = token_url.split('/')[-1]
+        with allure.step('Get token from last email'):
+            emails = self.get_api_v2_messages(limit=1).json()
+            token_url = json.loads(emails['items'][0]['Content']['Body'])['ConfirmationLinkUrl']
+            token = token_url.split('/')[-1]
         return token
 
     def get_token_by_login(
@@ -72,16 +75,17 @@ class MailhogApi:
             login: str,
             attempt=5
     ):
-        if attempt == 0:
-            raise AssertionError(f'Email with login {login} was not found')
-        emails = self.get_api_v2_messages(limit=100).json()['items']
-        for email in emails:
-            user_data = json.loads(email['Content']['Body'])
-            if login == user_data.get('Login'):
-                token = user_data.get('ConfirmationLinkUrl').split('/')[-1]
-                print(token)
-                return token
-            time.sleep(2)
+        with allure.step('Get token from email by login name to activate user'):
+            if attempt == 0:
+                raise AssertionError(f'Email with login {login} was not found')
+            emails = self.get_api_v2_messages(limit=100).json()['items']
+            for email in emails:
+                user_data = json.loads(email['Content']['Body'])
+                if login == user_data.get('Login'):
+                    token = user_data.get('ConfirmationLinkUrl').split('/')[-1]
+                    print(token)
+                    return token
+                time.sleep(2)
         return self.get_token_by_login(login=login, attempt=attempt - 1)
 
     def get_token_for_reset_password(
@@ -89,22 +93,24 @@ class MailhogApi:
             login: str,
             attempt=5
     ):
-        if attempt == 0:
-            raise AssertionError(f'Email with login {login} was not found')
-        emails = self.get_api_v2_messages(limit=100).json()['items']
-        for email in emails:
-            user_data = json.loads(email['Content']['Body'])
-            if login == user_data.get('Login'):
-                token = user_data.get('ConfirmationLinkUri').split('/')[-1]
-                print(token)
-                return token
-            time.sleep(2)
+        with allure.step('Get token from email by login name to reset password'):
+            if attempt == 0:
+                raise AssertionError(f'Email with login {login} was not found')
+            emails = self.get_api_v2_messages(limit=100).json()['items']
+            for email in emails:
+                user_data = json.loads(email['Content']['Body'])
+                if login == user_data.get('Login'):
+                    token = user_data.get('ConfirmationLinkUri').split('/')[-1]
+                    print(token)
+                    return token
+                time.sleep(2)
         return self.get_token_by_login(login=login, attempt=attempt - 1)
 
     def delete_all_messages(
             self
     ):
-        response = self.client.delete(path='/api/v1/messages')
+        with allure.step('Delete all emails'):
+            response = self.client.delete(path='/api/v1/messages')
         return response
 
 

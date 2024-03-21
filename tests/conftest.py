@@ -1,9 +1,12 @@
 from collections import namedtuple
 
+import allure
 import pytest
 import structlog
 from vyper import v
 from pathlib import Path
+
+from generic.assertions.post_v1_account import AssertionsPostV1Account
 from generic.helpers.dm_db import DmDatabase
 from generic.helpers.orm_db import OrmDatabase
 from services.dm_api_account import Facade
@@ -31,15 +34,20 @@ def facade(
     )
 
 
+connect = None
+
+
 @pytest.fixture
 def db():
-    db = DmDatabase(
-        user=v.get('database.dm3_5.user'),
-        password=v.get('database.dm3_5.password'),
-        host=v.get('database.dm3_5.host'),
-        database=v.get('database.dm3_5.database')
-    )
-    return db
+    global connect
+    if connect is None:
+        connect = DmDatabase(
+            user=v.get('database.dm3_5.user'),
+            password=v.get('database.dm3_5.password'),
+            host=v.get('database.dm3_5.host'),
+            database=v.get('database.dm3_5.database')
+        )
+    return connect
 
 
 @pytest.fixture
@@ -54,6 +62,12 @@ def orm():
     orm.db.close_connection()
 
 
+@pytest.fixture
+def assertions(db):
+    return AssertionsPostV1Account(db)
+
+
+@allure.step('Подготовка нового пользователя')
 @pytest.fixture
 def prepare_user(
         facade,

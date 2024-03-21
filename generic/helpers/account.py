@@ -4,6 +4,7 @@ from dm_api_account.models import (
     ChangePassword,
     ChangeEmail,
 )
+from generic.helpers.model_helpers import CustomChangePassword
 
 
 class Account:
@@ -84,7 +85,7 @@ class Account:
         token = self.facade.mailhog.get_token_for_reset_password(login=login)
 
         response = self.facade.account_api.put_v1_account_password(
-            json=ChangePassword(
+            json=CustomChangePassword(
                 login=login,
                 token=token,
                 oldPassword=old_password,
