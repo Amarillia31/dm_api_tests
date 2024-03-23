@@ -1,4 +1,4 @@
-from apis.dm_api_account.models import (
+from dm_api_account.models import (
     Registration,
     ResetPassword,
     ChangeEmail,

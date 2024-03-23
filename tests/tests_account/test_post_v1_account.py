@@ -4,7 +4,7 @@ from hamcrest import (
     has_properties,
 )
 
-from apis.dm_api_account.models.user_envelope_model import (
+from dm_api_account.models.user_envelope_model import (
     UserRole,
     Rating,
 )
