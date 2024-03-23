@@ -6,7 +6,7 @@ from utilites import (
 )
 
 from ..models import *
-from restclient.restclient import Restclient
+from common_libs.restclient.restclient import Restclient
 
 
 class AccountApi:

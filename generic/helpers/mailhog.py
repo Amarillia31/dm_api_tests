@@ -1,12 +1,9 @@
 import json
-import pprint
 import time
 
 import allure
-import requests
-from requests import session
 from requests import Response
-from restclient.restclient import Restclient
+from common_libs.restclient.restclient import Restclient
 
 
 def decorator(

@@ -1,32 +1,32 @@
-import allure
 import structlog
+import allure
 from hamcrest import (
     assert_that,
     has_properties,
-    has_entries,
 )
 
-from dm_api_account.models.user_envelope_model import (
+from apis.dm_api_account.models.user_envelope_model import (
     UserRole,
     Rating,
 )
 
 structlog.configure(
     processors=[
-        structlog.processors.JSONRenderer(indent=4, sort_keys=True, ensure_ascii=False)
-    ]
+        structlog.processors.JSONRenderer(indent=4, sort_keys=True, ensure_ascii=False)]
 )
 
 
-@allure.suite('Tests for method PUT{host}/v1/account/password')
+@allure.suite('Tests for method GET{host}/v1/account')
 @allure.sub_suite('Positive test cases')
-class TestsPutV1AccountPassword:
-    @allure.title('Change registered user password')
-    def test_put_v1_account_password(self, facade, orm, prepare_user, assertions):
+class TestsGetV1Account:
+    @allure.title('Check registration, activation and receiving  info of the new user')
+    def test_get_v1_account(self, facade, orm, prepare_user, assertions):
+        """
+        Test checks getting user info
+        """
         login = prepare_user.login
         email = prepare_user.email
         password = prepare_user.password
-        new_password = prepare_user.new_password
 
         facade.account.register_new_user(login=login, email=email, password=password)
         assertions.check_user_was_created(login=login)
@@ -36,9 +36,8 @@ class TestsPutV1AccountPassword:
 
         token = facade.login.get_auth_token(login=login, password=password)
         facade.account.set_headers(headers=token)
-        facade.account.reset_user_password(login=login, email=email, status_code=200)
-        response = facade.account.change_user_password(login=login, old_password=password, new_password=new_password)
-
+        facade.login.set_headers(headers=token)
+        response = facade.account.get_current_user_info()
         assert_that(
             response.resource, has_properties(
                 {

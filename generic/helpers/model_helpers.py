@@ -1,6 +1,6 @@
 from pydantic import field_validator
 
-from dm_api_account.models.change_password_model import ChangePassword
+from apis.dm_api_account.models.change_password_model import ChangePassword
 
 
 class CustomChangePassword(ChangePassword):

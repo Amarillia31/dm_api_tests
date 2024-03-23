@@ -11,6 +11,8 @@ from generic.helpers.dm_db import DmDatabase
 from generic.helpers.orm_db import OrmDatabase
 from services.dm_api_account import Facade
 from generic.helpers.mailhog import MailhogApi
+from data.post_v1_account import PostV1AccountData as user_data
+
 
 structlog.configure(
     processors=[
@@ -75,8 +77,8 @@ def prepare_user(
 ):
     user = namedtuple('User', 'login, email, password, new_password, new_email')
     User = user(
-        login="user_60", email="user_60@user_60", password="user_60%", new_password="user_60%!",
-        new_email="user_60_upd@user_60"
+        login=user_data.login, email=user_data.email, password=user_data.password, new_password=user_data.new_password,
+        new_email=user_data.new_email
     )
     orm.delete_user_by_login(login=User.login)
     dataset = orm.get_user_by_login(login=User.login)
@@ -96,7 +98,7 @@ options = (
 def set_config(
         request
 ):
-    config = Path(__file__).parents[1].joinpath('config')
+    config = Path(__file__).parents[2].joinpath('config')
     config_name = request.config.getoption('--env')
     v.set_config_name(config_name)
     v.add_config_path(config)

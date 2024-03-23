@@ -1,7 +1,6 @@
-from dm_api_account.models import (
+from apis.dm_api_account.models import (
     Registration,
     ResetPassword,
-    ChangePassword,
     ChangeEmail,
 )
 from generic.helpers.model_helpers import CustomChangePassword

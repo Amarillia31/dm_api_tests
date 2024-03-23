@@ -2,10 +2,9 @@ import allure
 from hamcrest import (
     assert_that,
     has_properties,
-    has_entries,
 )
 
-from dm_api_account.models.user_envelope_model import (
+from apis.dm_api_account.models.user_envelope_model import (
     UserRole,
     Rating,
 )

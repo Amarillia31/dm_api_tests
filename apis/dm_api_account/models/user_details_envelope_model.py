@@ -6,7 +6,7 @@ from typing import Any, List, Optional
 
 from pydantic import BaseModel, Extra, Field, StrictStr
 
-from dm_api_account.models.user_envelope_model import Rating, UserRole
+from apis.dm_api_account.models.user_envelope_model import Rating, UserRole
 
 
 class PagingSettings(BaseModel):
