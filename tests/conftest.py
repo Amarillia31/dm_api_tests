@@ -98,7 +98,7 @@ options = (
 def set_config(
         request
 ):
-    config = Path(__file__).parents[2].joinpath('config')
+    config = Path(__file__).parents[1].joinpath('config')
     config_name = request.config.getoption('--env')
     v.set_config_name(config_name)
     v.add_config_path(config)
