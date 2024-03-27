@@ -23,14 +23,12 @@ class Login:
             status_code: int = 200,
             full_response: bool = True
     ):
-        response = self.facade.login_api.post_v1_account_login(
-            json=LoginCredentials(
+        response = self.facade.login_api.v1_account_login_post(
+            login_credentials=LoginCredentials(
                 login=login,
                 password=password,
-                rememberMe=remember_me
-            ),
-            full_response=full_response,
-            status_code=status_code
+                remember_me=remember_me
+            )
         )
         return response
 
@@ -53,7 +51,7 @@ class Login:
             status_code: int = 204,
             **kwargs
     ):
-        response = self.facade.login_api.delete_v1_account_login(status_code=status_code, **kwargs)
+        response = self.facade.login_api.v1_account_login_delete(status_code=status_code, **kwargs)
         return response
 
     def logout_user_from_all_devices(
@@ -61,5 +59,5 @@ class Login:
             status_code: int = 204,
             **kwargs
     ):
-        response = self.facade.login_api.delete_v1_account_login_all(status_code=status_code, **kwargs)
+        response = self.facade.login_api.v1_account_login_all_delete(status_code=status_code, **kwargs)
         return response

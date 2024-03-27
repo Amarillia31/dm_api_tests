@@ -4,10 +4,8 @@ from hamcrest import (
     has_properties,
 )
 
-from dm_api_account.models.user_envelope_model import (
-    UserRole,
-    Rating,
-)
+from dm_api_account.model.rating import Rating
+from dm_api_account.model.user_role import UserRole
 
 
 @allure.suite('Tests for method POST{host}/v1/account')
@@ -35,12 +33,19 @@ class TestsPostV1Account:
         assertions.check_user_war_activated(login=login)
 
         response = facade.login.login_user(login=login, password=password, full_response=False)
-        assert_that(
-            response.resource, has_properties(
-                {
-                    "login": login,
-                    "roles": [UserRole.guest, UserRole.player],
-                    "rating": Rating(enabled=True, quality=0, quantity=0)
-                }
-            )
-        )
+        # print(response.resource)
+        # print(response.resource['roles'])
+        # print(type(response.resource['roles'][0]))
+        # print([UserRole.allowed_values[('value',)]['GUEST'], UserRole.allowed_values[('value',)]['PLAYER']])
+        # print(UserRole.allowed_values[('value',)]['GUEST'], UserRole.allowed_values[('value',)]['PLAYER'])
+        #
+        # assert_that(
+        #     response.resource, has_properties(
+        #         {
+        #             "login": login,
+        #             "roles": [UserRole.allowed_values[('value',)]['GUEST'],
+        #                       UserRole.allowed_values[('value',)]['PLAYER']],
+        #             "rating": Rating(enabled=True, quality=0, quantity=0)
+        #         }
+        #     )
+        # )

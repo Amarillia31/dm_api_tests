@@ -3,7 +3,7 @@ from dm_api_account.models import (
     ResetPassword,
     ChangeEmail,
 )
-from generic.helpers.model_helpers import CustomChangePassword
+#from generic.helpers.model_helpers import CustomChangePassword
 
 
 class Account:
@@ -28,13 +28,12 @@ class Account:
             status_code: int = 201,
             **kwargs
     ):
-        response = self.facade.account_api.post_v1_account(
-            json=Registration(
+        response = self.facade.account_api.register(
+            registration=Registration(
                 login=login,
                 email=email,
                 password=password
             ),
-            status_code=status_code,
             **kwargs
         )
         return response
@@ -46,7 +45,7 @@ class Account:
             **kwargs
     ):
         token = self.facade.mailhog.get_token_by_login(login=login)
-        response = self.facade.account_api.put_v1_account_token(token=token, status_code=status_code, **kwargs)
+        response = self.facade.account_api.activate(token=token, status_code=status_code, **kwargs)
         return response
 
     def get_current_user_info(
