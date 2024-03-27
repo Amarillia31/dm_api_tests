@@ -31,21 +31,14 @@ class TestsPostV1Account:
 
         orm.update_activation_status(login=login, activation_status=True)
         assertions.check_user_war_activated(login=login)
+        response = facade.login.login_user(login=login, password=password)
+        assert_that(
+            response.resource, has_properties(
+                {
+                    "login": login,
+                    "roles": [UserRole("Guest"), UserRole("Player")],
+                    "rating": Rating(enabled=True, quality=0, quantity=0)
+                }
+            )
+        )
 
-        response = facade.login.login_user(login=login, password=password, full_response=False)
-        # print(response.resource)
-        # print(response.resource['roles'])
-        # print(type(response.resource['roles'][0]))
-        # print([UserRole.allowed_values[('value',)]['GUEST'], UserRole.allowed_values[('value',)]['PLAYER']])
-        # print(UserRole.allowed_values[('value',)]['GUEST'], UserRole.allowed_values[('value',)]['PLAYER'])
-        #
-        # assert_that(
-        #     response.resource, has_properties(
-        #         {
-        #             "login": login,
-        #             "roles": [UserRole.allowed_values[('value',)]['GUEST'],
-        #                       UserRole.allowed_values[('value',)]['PLAYER']],
-        #             "rating": Rating(enabled=True, quality=0, quantity=0)
-        #         }
-        #     )
-        # )

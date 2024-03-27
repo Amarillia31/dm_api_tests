@@ -19,9 +19,7 @@ class Login:
             self,
             login: str,
             password: str,
-            remember_me: bool = True,
-            status_code: int = 200,
-            full_response: bool = True
+            remember_me: bool = True
     ):
         response = self.facade.login_api.v1_account_login_post(
             login_credentials=LoginCredentials(

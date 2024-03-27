@@ -9,8 +9,7 @@ class Facade:
     def __init__(
             self,
             host,
-            mailhog=None,
-            headers=None
+            mailhog=None
     ):
         with ApiClient(configuration=Configuration(host=host)) as api_client:
             self.account_api = AccountApi(api_client)
