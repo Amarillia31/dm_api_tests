@@ -1,12 +1,16 @@
+import asyncio
 from collections import namedtuple
 
 import allure
 import pytest
 import structlog
+from grpclib.client import Channel
 from vyper import v
 from pathlib import Path
 
+from apis.dm_api_account_grpc_async import AccountServiceStub
 from generic.assertions.post_v1_account import AssertionsPostV1Account
+from generic.helpers.account_grpc import GrpcAccount
 from generic.helpers.dm_db import DmDatabase
 from generic.helpers.orm_db import OrmDatabase
 from services.dm_api_account import Facade
@@ -114,3 +118,26 @@ def pytest_addoption(
     parser.addoption('--env', action='store', default='stg')
     for option in options:
         parser.addoption(f'--{option}', action='store', default=None)
+
+
+@pytest.fixture
+def grpc_account():
+    client = GrpcAccount(target='5.63.153.31:5055')
+    yield client
+    client.close()
+
+
+@pytest.fixture(scope='session')
+def event_loop():
+    yield asyncio.get_event_loop()
+
+
+@pytest.fixture(scope='session')
+def grpc_channel():
+    return Channel(host='5.63.153.31', port=5055)
+
+
+@pytest.fixture(scope='session')
+def grpc_account_async(grpc_channel):
+    yield AccountServiceStub(channel=grpc_channel)
+
