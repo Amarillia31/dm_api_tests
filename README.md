@@ -102,6 +102,6 @@ docker run -it --rm dm_api_tests
 ![This is an image](images/screenshots/graphs.png)
 
 ##### Во вкладке Suites находятся собранные тест кейсы, у которых описаны шаги и добавлены логи.
-![This is an image](images/screenshots/allure-suites.png)
+![This is an image](images/screenshots/suites.png)
 
 
