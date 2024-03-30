@@ -4,6 +4,8 @@ from hamcrest import (
     assert_that,
     has_entries,
 )
+
+from generic.assertions.response_checker import check_status_code_http
 from utilites import random_string
 
 
@@ -30,11 +32,10 @@ def test_create_and_activated_user_with_random_params(
 
     orm.delete_user_by_login(login=login)
 #    facade.mailhog.delete_all_messages()
-    response = facade.account.register_new_user(login=login, email=email, password=password, status_code=status_code)
+    with check_status_code_http(expected_status_code=status_code, expected_result=check):
+        response = facade.account.register_new_user(login=login, email=email, password=password)
     if status_code == 201:
+        assertions.check_user_was_created(login=login)
         facade.account.activate_registered_user(login=login)
         assertions.check_user_war_activated(login=login)
-
-    else:
-        assert response.json()[
-                   "errors"] == check, f'Error message {response.json()["errors"]} received instead of {check}'
+        facade.login.login_user(login=login, password=password)

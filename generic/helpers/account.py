@@ -1,9 +1,9 @@
+from dm_api_account.model.change_password import ChangePassword
 from dm_api_account.models import (
     Registration,
     ResetPassword,
     ChangeEmail,
 )
-#from generic.helpers.model_helpers import CustomChangePassword
 
 
 class Account:
@@ -16,16 +16,16 @@ class Account:
 
     def set_headers(
             self,
-            headers
+            header_name,
+            header_value
     ):
-        self.facade.account_api.client.session.headers.update(headers)
+        self.facade.login_api.api_client.set_default_header(header_name=header_name, header_value=header_value)
 
     def register_new_user(
             self,
             login: str,
             email: str,
             password: str,
-            status_code: int = 201,
             **kwargs
     ):
         response = self.facade.account_api.register(
@@ -41,33 +41,30 @@ class Account:
     def activate_registered_user(
             self,
             login: str,
-            status_code: int = 200,
             **kwargs
     ):
         token = self.facade.mailhog.get_token_by_login(login=login)
-        response = self.facade.account_api.activate(token=token, status_code=status_code, **kwargs)
+        response = self.facade.account_api.activate(token=token, **kwargs)
         return response
 
     def get_current_user_info(
             self,
-            status_code: int = 200,
             **kwargs
     ):
-        response = self.facade.account_api.get_v1_account(status_code=status_code, **kwargs)
+        response = self.facade.account_api.get_current(**kwargs)
         return response
 
     def reset_user_password(
             self,
             login: str,
             email: str,
-            status_code: int = 200,
             **kwargs
     ):
-        response = self.facade.account_api.post_v1_account_password(
-            json=ResetPassword(
+        response = self.facade.account_api.reset_password(
+            reset_password=ResetPassword(
                 login=login,
                 email=email
-            ), status_code=status_code,
+            ),
             **kwargs
         )
         return response
@@ -77,19 +74,17 @@ class Account:
             login: str,
             old_password: str,
             new_password: str,
-            status_code: int = 200,
             **kwargs
     ):
         token = self.facade.mailhog.get_token_for_reset_password(login=login)
 
-        response = self.facade.account_api.put_v1_account_password(
-            json=CustomChangePassword(
+        response = self.facade.account_api.change_password(
+            change_password=ChangePassword(
                 login=login,
                 token=token,
-                oldPassword=old_password,
-                newPassword=new_password
+                old_password=old_password,
+                new_password=new_password
             ),
-            status_code=status_code,
             **kwargs
         )
         return response

@@ -1,14 +1,13 @@
 import allure
 import structlog
+from modules.dm_api_account.models import LoginCredentials
 from hamcrest import (
     assert_that,
     has_properties,
 )
 
-from dm_api_account.models.user_envelope_model import (
-    UserRole,
-    Rating,
-)
+from dm_api_account.model.rating import Rating
+from dm_api_account.model.user_role import UserRole
 
 structlog.configure(
     processors=[
@@ -32,17 +31,16 @@ class TestsPutV1AccountPassword:
 
         orm.update_activation_status(login=login, activation_status=True)
         assertions.check_user_war_activated(login=login)
-
         token = facade.login.get_auth_token(login=login, password=password)
-        facade.account.set_headers(headers=token)
-        facade.account.reset_user_password(login=login, email=email, status_code=200)
+        facade.account.set_headers(header_name='X-Dm-Auth-Token', header_value=token)
+        facade.account.reset_user_password(login=login, email=email)
         response = facade.account.change_user_password(login=login, old_password=password, new_password=new_password)
 
         assert_that(
             response.resource, has_properties(
                 {
                     "login": login,
-                    "roles": [UserRole.guest, UserRole.player],
+                    "roles": [UserRole("Guest"), UserRole("Player")],
                     "rating": Rating(enabled=True, quality=0, quantity=0)
                 }
             )

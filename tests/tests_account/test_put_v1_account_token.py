@@ -5,10 +5,8 @@ from hamcrest import (
     has_properties,
 )
 
-from dm_api_account.models.user_envelope_model import (
-    UserRole,
-    Rating,
-)
+from dm_api_account.model.rating import Rating
+from dm_api_account.model.user_role import UserRole
 
 structlog.configure(
     processors=[
@@ -31,8 +29,9 @@ class TestsPutV1AccountEmail:
         response = facade.account.activate_registered_user(login=login)
         assertions.check_user_war_activated(login=login)
 
-        assert_that(response.resource, has_properties({
-            "login": login,
-            "roles": [UserRole.guest, UserRole.player],
-            "rating": Rating(enabled=True, quality=0, quantity=0)
+        assert_that(
+            response.resource, has_properties({
+                "login": login,
+                "roles": [UserRole("Guest"), UserRole("Player")],
+                "rating": Rating(enabled=True, quality=0, quantity=0)
         }))

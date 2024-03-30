@@ -11,9 +11,11 @@ class Login:
 
     def set_headers(
             self,
-            headers
+            header_name,
+            header_value
+
     ):
-        self.facade.login_api.client.session.headers.update(headers)
+        self.facade.login_api.api_client.set_default_header(header_name=header_name, header_value=header_value)
 
     def login_user(
             self,
@@ -22,6 +24,7 @@ class Login:
             remember_me: bool = True
     ):
         response = self.facade.login_api.v1_account_login_post(
+            _return_http_data_only=False,
             login_credentials=LoginCredentials(
                 login=login,
                 password=password,
@@ -39,9 +42,7 @@ class Login:
             login=login,
             password=password
         )
-        token = {
-            'X-Dm-Auth-Token': response.headers.get('X-Dm-Auth-Token')
-        }
+        token = response[2]['X-Dm-Auth-Token']
         return token
 
     def logout_user(
