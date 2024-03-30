@@ -5,10 +5,10 @@
 modules/dm_api_account  - тут лежит сгенерированный клиент, 
 он должен быть установлен как пакет перед началом работы
 2) clients -  Framework where all supporting libraries were moved to independent repositories: 
-https://github.com/Amarillia31/orm_client.git
-https://github.com/Amarillia31/restclient.git
-https://github.com/Amarillia31/db_client.git
-https://github.com/Amarillia31/dm_api_account.git
+https://github.com/Amarillia31/orm_client.git  
+https://github.com/Amarillia31/restclient.git  
+https://github.com/Amarillia31/db_client.git  
+https://github.com/Amarillia31/dm_api_account.git  
 
 3) grpc_client   - содержит сгенерированный grpc клиент и
 пример теста для синхронного и асинхронного клиента
@@ -90,7 +90,7 @@ docker run -it --rm dm_api_tests
  └── README.md                   # Файл с описанием репозитория для тестов
 ```
 ### В файле config настраиваются окружения и выносятся основные подключения.
-![This is an image](config.png)
+![This is an image](images/screenshots/config.png)
 
 
 
@@ -102,6 +102,6 @@ docker run -it --rm dm_api_tests
 ![This is an image](images/screenshots/graphs.png)
 
 ##### Во вкладке Suites находятся собранные тест кейсы, у которых описаны шаги и добавлены логи.
-![This is an image](allure-suites.png)
+![This is an image](images/screenshots/allure-suites.png)
 
 
