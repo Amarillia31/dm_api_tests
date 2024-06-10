@@ -31,7 +31,7 @@ class TestsPostV1Account:
 
         orm.update_activation_status(login=login, activation_status=True)
         assertions.check_user_war_activated(login=login)
-        response = facade.login.login_user(login=login, password=password)
+        response = facade.login.login_user(login=login, password=password, _return_http_data_only=True)
         assert_that(
             response.resource, has_properties(
                 {

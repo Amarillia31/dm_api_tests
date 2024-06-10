@@ -21,10 +21,11 @@ class Login:
             self,
             login: str,
             password: str,
-            remember_me: bool = True
+            remember_me: bool = True,
+            _return_http_data_only=False
     ):
         response = self.facade.login_api.v1_account_login_post(
-            _return_http_data_only=False,
+            _return_http_data_only=_return_http_data_only,
             login_credentials=LoginCredentials(
                 login=login,
                 password=password,
